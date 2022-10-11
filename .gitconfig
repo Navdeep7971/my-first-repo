@@ -1,0 +1,7 @@
+[user]
+	name = Navdeep797
+	email = navdeep797@gmail.com
+[credentials]
+	helper = cache
+[credential]
+	helper = cache --timeout=3600

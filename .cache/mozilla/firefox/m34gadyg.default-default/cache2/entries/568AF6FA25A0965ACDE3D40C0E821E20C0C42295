@@ -1,0 +1,739 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <div id="mf_pix_div"></div>
+    <script type="text/javascript">
+
+
+      (function (doc) {
+        var parameters = {};
+        var urlPixelDrops = {};
+        var DIV_ID = 'mf_pix_div';
+        setUrlPixelDrops = function () {
+          urlPixelDrops = {
+            //'URL' : { 'dropType' : 'equals', 'pixels' : ['PIXEL1', 'PIXEL2'] }
+          }
+        };
+        setParametersDefault = function () {
+          parameters['orderNumber'] = '';
+          parameters['prodID'] = '';
+          parameters['catID'] = '';
+          parameters['cart'] = '';
+          parameters['price'] = '';
+          parameters['href'] = '';
+          parameters['referrer'] = '';
+          parameters['nan_type'] = 'visit';
+          parameters['nan_name'] = 'landing';
+          parameters['ts'] = new Date().getTime();
+          parameters['uid'] = translateUID();
+          parameters['uid3'] = readCookie('uid3');
+          parameters['facebook'] = {
+            'id': ''
+          };
+          parameters['nextperf'] = {
+            'home' : '',
+            'prod' : '',
+            'cart' : '',
+            'cat'  : '',
+            'conv' : ''
+          };
+        };
+        createCookie = function (name, value, days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    var expires = "; expires=" + date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name + "=" + value + expires + ";path=/;domain=.rd.linksynergy.com;";
+};
+readCookie = function (cookie_name) {
+  var ca = doc.cookie.split(';');
+  var cookie_value = "";
+  var max_merchant_keep = 10;
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    if (c.indexOf(cookie_name) == 0) {
+      cookie_value = c.substring(cookie_name.length + 1);
+      break
+    }
+  }
+  return cookie_value;
+};
+UserId = function() {
+  return readCookie('rmuid')
+};
+
+        drop_js = function(pixel) {
+  var body = document.getElementsByTagName('body')[0].firstChild;
+  var script_jsTag = document.createElement('script');
+  if(script_jsTag) {
+    script_jsTag.setAttribute('type', 'text/javascript');
+    script_jsTag.src = pixel;
+    if(body) body.parentNode.insertBefore(script_jsTag, body);
+  };
+};
+
+drop_img = function(pixel) {
+  var body = document.getElementsByTagName('body')[0].firstChild;
+  var img_tag = document.createElement('img');
+  if(img_tag) {
+    img_tag.src = pixel;
+    if(body) body.parentNode.insertBefore(img_tag, body);
+  };
+};
+
+// also include pix file load script on parent page function
+// may want to use a new segment
+// see TRACK-273
+JSloadScript = function(url, type) {
+  if (window.parent.postMessage != undefined) {
+    if (window.addEventListener != undefined) {
+      window.parent.postMessage({'JSloadScript': {'value': url, 'type': type}}, '*');
+    } else if (window.attachEvent != undefined) {
+      // IE8 and IE9 convert objects to strings when passed via postMessage, so...
+      // we have to serialize and de-serialize the object ourselves
+      window.parent.postMessage("JSloadScript|" + url+ "|" + type + ",", '*');
+    };
+  };
+};
+
+        admin_pixels = function(params, have_cart) {
+  function extractHostname(url) {
+    var hostname;
+
+    if (url.indexOf('://') > -1) {
+      hostname = url.split('/')[2];
+    } else {
+      hostname = url.split('/')[0];
+    }
+
+    hostname = hostname.split(':')[0];
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+  }
+
+  function extractRootDomain(url) {
+    var domain = extractHostname(url);
+    var splitArr = domain.split('.');
+    var arrLen = splitArr.length;
+
+    if (arrLen > 2) {
+      domain = splitArr[arrLen - 2] + "." + splitArr[arrLen - 1];
+      if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+        domain = splitArr[arrLen - 3] + "." + domain;
+      }
+    }
+    return domain;
+  }
+
+  /*Nanigans variables*/
+  var rm_fire3p = params['_rm_fire3p'];
+  var mf_uID = params['uid'];
+  var mf_uID3 = params['uid3'];
+  var mf_price = params['cart'];
+  var mf_ordernumber = params['orderNumber'];
+  var mf_prod_id = params['prodID'];
+  var mf_cat_id = params['catID'];
+  var mf_type = params['nan_type'];
+  var mf_name = params['nan_name'];
+  var mf_referrer = params['referrer'];
+  var mf_href = params['href'];
+  var mf_aid = '';
+  var mf_ts = params['ts'];
+
+  if (mf_ordernumber != '') {
+    mf_price = params['price'];
+  };
+
+ // Don't load pixels if this file has been loaded as a piggyback.
+ for(key in params) {
+   if(key == "rmpb" && params[key] != '') {
+     return '';
+   }
+ }
+
+  var tags = {};
+  var content = '';
+
+  if (have_cart === true) {
+    tags = { 
+    };
+  } else {
+    tags = { 
+        "6577_80_18672":"insight.adsrvr.org/track/pxl/?adv=pikr9u5&ct=0:htnoegm&fmt=3",
+        "8030_80_13781":"insight.adsrvr.org/track/evnt/?adv=pikr9u5&ct=0:3ei9qgu&fmt=3"
+    };
+  }
+
+  // TODO: Consolidate internalDomain list
+  var internalDomains=["linksynergy.com", "dpclk.com", "nxtck.com", "mediaforge.com", "jrs5.com", "dc-storm.com", "linksynergy.walmart.com"];
+
+  for(var tag_id in tags) {
+    var pixel = tags[tag_id];
+    var found1p = false;
+    if(!rm_fire3p) {
+      if(pixel !== "") {
+        var pixelDomain = extractRootDomain(pixel)
+        if (internalDomains.indexOf(pixelDomain) > -1) {
+          found1p = true;
+        }
+      }
+    }
+    if(rm_fire3p || found1p) {
+      if(pixel.indexOf('/js/') != -1 || pixel.indexOf('/js?') != -1) {
+        drop_js("//" + pixel);
+      }
+      else {
+        content += "<img id=\"" + tag_id + "\" src=\"//" + pixel + "\" height=\"0\" width=\"0\" alt=\"\"/>";
+      }
+    }
+  }
+  return content;
+}
+
+        handleNextPerf = function() {
+  // Don't call NextPerf when tracking consent only
+  if(parameters['_rm_fire3p'] == false) { return };
+
+  var next_perf = parameters['nextperf'];
+
+  var ptype = parameters['pt'];
+  if (ptype === '' || ptype === undefined ) {
+    if (parameters['orderNumber'] != '' && parameters['price'] != '') {
+      ptype = 'conv';
+    } else if (parameters['cart'] != '') {
+      ptype = 'cart';
+    } else if (parameters['catID'] != '') {
+      ptype = 'cat';
+    } else if (parameters['prodID'] != '') {
+      ptype = 'prod';
+    } else if (parameters['nan_type'] == 'visit') {
+      ptype = 'home';
+    } else if (parameters['minibasket'] == '') {
+      // for JuiceBeauty. see ticket IN-10139
+      ptype = 'minibasket';
+    }
+  }
+
+  // Special code condition for Lacoste.
+  // Do not change this code until they have been moved to SPI.
+  switch (ptype) {
+    case 'category': ptype = 'cat';  break;
+    case 'product':  ptype = 'prod'; break;
+  }
+
+  if (next_perf[ptype] === '') { return };
+
+  var domain = next_perf['domain'] || 'act-us.rd.linksynergy.com';
+  var script_src = "//" + domain + "/act.php?tag=" + next_perf[ptype];
+
+  // added to double track on the new Unified Tracking endpoint(s)
+  var ut_script_src = "//ut.rd.linksynergy.com/t?rmch=np&engine=pix&tag=" + next_perf[ptype];
+
+  if(parameters['r1'] != undefined) { 
+    script_src    += "&r1=" + parameters['r1']; 
+    ut_script_src += "&r1=" + parameters['r1']; 
+  }
+  if(parameters['s1'] != undefined) { 
+    script_src    += "&s1=" + parameters['s1'];
+    ut_script_src += "&s1=" + parameters['s1'];
+  }
+  // for webjet7186. See ticket IN-8186: s2-s8,d1,d2,i1,i2
+  if(parameters['s2'] != undefined) {
+    script_src    += "&s2=" + parameters['s2'];
+    ut_script_src += "&s2=" + parameters['s2'];
+  }
+  if(parameters['s3'] != undefined) {
+    script_src    += "&s3=" + parameters['s3'];
+    ut_script_src += "&s3=" + parameters['s3'];
+  }
+  if(parameters['s4'] != undefined) {
+    script_src    += "&s4=" + parameters['s4'];
+    ut_script_src += "&s4=" + parameters['s4'];
+  }
+  if(parameters['s5'] != undefined) {
+    script_src    += "&s5=" + parameters['s5'];
+    ut_script_src += "&s5=" + parameters['s5'];
+  }
+  if(parameters['s6'] != undefined) {
+    script_src    += "&s6=" + parameters['s6'];
+    ut_script_src += "&s6=" + parameters['s6'];
+  }
+  if(parameters['s7'] != undefined) { 
+    script_src    += "&s7=" + parameters['s7'];
+    ut_script_src += "&s7=" + parameters['s7'];
+  }
+  if(parameters['s8'] != undefined) {
+    script_src    += "&s8=" + parameters['s8'];
+    ut_script_src += "&s8=" + parameters['s8'];
+  }
+  if(parameters['d1'] != undefined) {
+    script_src    += "&d1=" + parameters['d1'];
+    ut_script_src += "&d1=" + parameters['d1'];
+  }
+  if(parameters['d2'] != undefined) {
+    script_src    += "&d2=" + parameters['d2'];
+    ut_script_src += "&d2=" + parameters['d2'];
+  }
+  if(parameters['i1'] != undefined) {
+    script_src    += "&i1=" + parameters['i1'];
+    ut_script_src += "&i1=" + parameters['i1'];
+  }
+  if(parameters['i2'] != undefined) {
+    script_src    += "&i2=" + parameters['i2'];
+    ut_script_src += "&i2=" + parameters['i2'];
+  }
+  // for bosene6781. See ticket IN-7397
+  if(parameters['s'] != undefined) {
+    script_src    += "&s1=" + parameters['s'];
+    ut_script_src += "&s1=" + parameters['s'];
+  }
+  // for landse6993. See ticket IN-8602
+  if(parameters['b1'] != undefined) {
+    script_src    += "&b1=" + parameters['b1'];
+    ut_script_src += "&b1=" + parameters['b1'];
+  }
+  //for webjet7186. See ticket IN-8811
+  if(parameters['price'] != undefined) {
+    script_src    += "&mt=" + parameters['price'];
+    ut_script_src += "&mt=" + parameters['price'];
+  }
+
+  var drop = true;
+
+  switch (ptype) {
+    case 'conv':
+      script_src += "&id=" + parameters['orderNumber'];
+      script_src += "&tvalid=" + (next_perf['tvalid_func'] ? next_perf['tvalid_func']() : (parameters['tvalid'] || '0'));
+
+      // added to double track on the new Unified Tracking endpoint(s)
+      ut_script_src += "&id=" + parameters['orderNumber'];
+      ut_script_src += "&tvalid=" + (next_perf['tvalid_func'] ? next_perf['tvalid_func']() : (parameters['tvalid'] || '0'));
+      
+      if (parameters['prodID'] != '') {
+        script_src    += "&pid=" + parameters['prodID'];
+        ut_script_src += "&pid=" + parameters['prodID'];
+      }
+      break;
+    case 'cart':
+      if (parameters['prodID'] != '') {
+        script_src    += "&pid=" + parameters['prodID'];
+        ut_script_src += "&pid=" + parameters['prodID'];
+      }
+      break;
+    case 'cat':
+      script_src    += "&cid=" + parameters['catID'];
+      ut_script_src += "&cid=" + parameters['catID'];
+      if (parameters['prodID'] != '') {
+        script_src    += "&pid=" + parameters['prodID'];
+        ut_script_src += "&pid=" + parameters['prodID'];
+      }
+      break;
+    case 'prod':
+      script_src    += "&pid=" + parameters['prodID'];
+      ut_script_src += "&pid=" + parameters['prodID'];
+      break;
+    case 'home':
+      break;
+    case 'minibasket':
+      // for JuiceBeauty. see ticket IN-10139
+      if (parameters['prodID'] != '') {
+        script_src    += "&pid=" + parameters['prodID'];
+        ut_script_src += "&pid=" + parameters['prodID'];
+      }
+      break;
+    default:
+      drop = false;
+      break;
+  }
+
+  if (drop) {
+    drop_js(script_src);
+    drop_img(ut_script_src);
+  }
+};
+
+        loadScript = function(src) {
+  var el = document.createElement('script');
+  if (el) {
+    el.setAttribute('type', 'text/javascript');
+    el.src = src;
+    document.body.appendChild(el);
+  }
+};
+
+
+        translateUID = function () {
+  var uid = readCookie('uID');
+  var new_uid = "";
+  for (var i = 0; i < uid.length; i++) {
+    var uid_char = uid.charAt(i).charCodeAt();
+    if ((uid_char < 48) || (uid_char > 122) || ((uid_char > 57) && (uid_char < 65)) || ((uid_char > 90) && (uid_char < 97))) {
+      if (uid_char == 43) new_uid += "mfplusmf";
+      if (uid_char == 61) new_uid += "mfequalmf";
+      if (uid_char == 47) new_uid += "mfslashmf";
+      if (uid_char == 45) new_uid += "mfhyphenmf";
+    }
+    else {
+      new_uid += uid.charAt(i);
+    }
+  }
+  return new_uid;
+};
+        checkForProductCount = function (cookie_name, min_prod_count) {
+  var result = false;
+  var prodCookieVal = readCookie('pID');
+  if (prodCookieVal != '') {
+    var cookie_array = prodCookieVal.split('|');
+    // TODO: Replace "... .MerchantID ..." with the dev equivalent of "... .ParentMerchantID ..." once implemented in tag producer. This function doesn't work for children in Linksynergy
+    var mid = '6577';
+    var mid_count = 0;
+    for (var prod_idx in cookie_array) {
+      // cookie_array[prod_idx] is formatted X[Y,Y,Y]Z -- Split on [, then ], gives us the MID and the array of Y. We can ignore Z
+      var cookieMidAndRest = cookie_array[prod_idx].split('[');
+      if (cookieMidAndRest.length < 2) continue;
+      // Handle the case of a prodID having a ] -- Pop off the MID then join on empty string to get the "rest"
+      var cookieMid = cookieMidAndRest.shift();
+      var rest = cookieMidAndRest.join('[');
+      var fromEnd = rest.lastIndexOf(']');
+      var prods = rest.substring(0, fromEnd);
+
+      if (cookieMid == mid) {
+        var productArray = prods.split(',');
+        mid_count += productArray.length;
+      }
+    }
+    if (mid_count >= min_prod_count) {
+      result = true;
+    }
+  }
+  return result;
+}
+
+        parseQueryString = function () {
+  var params = location.search.split('&');
+  for (var param_index = 0; param_index < params.length; param_index++) {
+    var split_query = params[param_index].split('=');
+    if (split_query.length === 2) {
+      var name = split_query[0];
+      var value = split_query[1];
+      var q_index = name.indexOf('?');
+      if(q_index == 0) {
+        name = name.substring(1);
+      }
+      parameters[name] = value;
+      if (name.indexOf('orderNumber') !== -1) {
+        parameters['nan_type'] = 'purchase';
+        parameters['nan_name'] = 'main';
+      }
+      if (name.indexOf('prodID') !== -1) {
+        parameters['nan_type'] = 'user';
+        parameters['nan_name'] = 'product_view';
+      }
+      if (name.indexOf('catID') !== -1) {
+        parameters['nan_type'] = 'user';
+        parameters['nan_name'] = 'product_view';
+      }
+    }
+  }
+  parameters['_rm_fire3p'] = (parameters['_rm_fire3p'] == null || parameters['_rm_fire3p'] == 'undefined' || parameters['_rm_fire3p'] == 'true');
+};
+
+        processtags = function () {
+          setParametersDefault();
+          parseQueryString();
+          setUrlPixelDrops();
+          handleNextPerf();
+          // temp variables for pixel calls
+    var gdpr_consent = parameters['_gdpr_consent'];
+    var rm_fire3p = parameters['_rm_fire3p'];
+          var mf_uID = parameters['uid'];
+          var mf_uID3 = parameters['uid3'];
+          var mf_price = parameters['cart'];
+          var mf_ordernumber = parameters['orderNumber'];
+          var mf_prod_id = parameters['prodID'];
+          var mf_cat_id = parameters['catID'];
+          var mf_type = parameters['nan_type'];
+          var mf_name = parameters['nan_name'];
+          var have_cart = (parameters['cart'] != '');
+
+          if (mf_ordernumber != '') mf_price = parameters['price'];
+
+          var content = '';
+      
+    if(!rm_fire3p) content = ""
+          content += "" + ((typeof rm_fire3p == "undefined" || rm_fire3p) ? "<img src='//match.adsrvr.org/track/cmf/generic?ttd_pid=1i071nc&ttd_tpi=1" + ( typeof gdpr_consent !== "undefined" && gdpr_consent !== null && gdpr_consent !== "" ? ("&gdpr=1&gdpr_consent=" + gdpr_consent ) : "" ) + "' height='0' width='0' alt='' />" : "") + "" + (((typeof rm_fire3p == "undefined" || rm_fire3p) && UserId() != "") ? "<img src='//idsync.rlcdn.com/458359.gif?partner_uid=" + UserId() + "' height='0' width='0' alt='' />" : "") + "";
+          content += appendUrlPixels(rm_fire3p);
+          content += admin_pixels(parameters, have_cart);
+          document.getElementById(DIV_ID).innerHTML = content;
+
+    if(rm_fire3p) implementFacebook();
+        };
+
+        implementFacebook = function () {
+  var fb = parameters['facebook'];
+  if (fb.id == '') return;
+
+  !function (f, b, e, v, n, t, s) {
+    if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }
+      ; if (!f._fbq) f._fbq = n;
+    n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+    t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+  }(window,
+    document, 'script', '//connect.facebook.net/en_US/fbevents.js');
+  fbq('init', fb.id);
+  var defaultEvents = facebookEvents({});
+
+  if (fb.defaults != false) {
+    for (e in fb.events) {
+      // use default events overrides if they were provided
+      if (defaultEvents[e]) {
+        var f = fb.events[e]
+        if (f.condition) {
+          defaultEvents[e].condition = f.condition
+        }
+        if (f.payload) {
+          defaultEvents[e].payload = f.payload
+        }
+      }
+    }
+    // use default events
+    fb.events = defaultEvents
+  }
+
+  for (e in fb.events) {
+    var f = fb.events[e]
+    if (f && f.condition(parameters)) {
+      if (f.payload) {
+        fbq('track', e, f.payload(parameters));
+      } else {
+        fbq('track', e);
+      }
+    }
+  }
+};
+
+// replacements is an object with keys indicating desired value substitutions
+// example: {'content_type': 'product_group'}
+facebookEvents = function (replacements) {
+  // content_type default is 'product'
+  var content_type = 'product';
+  if (replacements.content_type) {
+    content_type = replacements.content_type
+  };
+
+  // currency default is 'USD'
+  var currency = 'USD';
+  if (replacements.currency) {
+    currency = replacements.currency
+  };
+
+  decodeProducts = function (prodID, products) {
+    var decoded = decodeURIComponent(prodID);
+    products = decoded.split(',');
+    return products;
+  }
+
+  return {
+    'PageView': { 'condition': function (params) { return true; } },
+    'ViewContent': {
+      'condition': function (params) {
+        if (params['pt'] != undefined && params['pt'] == 'cat' || params['pt'] == 'cart') {
+          return false
+        }
+        return params['prodID'] != undefined && params['prodID'] != ''
+      },
+      'payload': function (params) {
+        var products = [];
+        if (params['prodID'] != undefined && params['prodID'] != '') {
+          products = decodeProducts(params['prodID'], products);
+        }
+        return { 'content_type': content_type, 'content_ids': products }
+      }
+    },
+    'AddToCart': {
+      'condition': function (params) { return params['cart'] != '' },
+      'payload': function (params) {
+        var products = [];
+        if (params['prodID'] != undefined && params['prodID'] != '') {
+          products = decodeProducts(params['prodID'], products);
+        }
+        if (products.length > 0) {
+          return { 'value': params['cart'], 'currency': currency, 'content_type': content_type, 'content_ids': products };
+        } else {
+          return {};
+        }
+      }
+    },
+    'InitiateCheckout': {
+      'condition': function (params) {
+        if (params['pt'] != undefined && params['pt'] == 'checkout') {
+          return true;
+        }
+      }
+    },
+    'Purchase': {
+      'condition': function (params) { return params['orderNumber'] != '' && params['price'] != '' },
+      'payload': function (params) {
+        var products = [];
+        if (params['prodID'] != undefined && params['prodID'] != '') {
+          products = decodeProducts(params['prodID'], products);
+        }
+        // IN-9677 Facebook is rejecting symbols from price this included commas and negative values
+        var price = params['price'].replace(',', '');
+        if (price < 0) { price = 0.00 }
+        // End update from IN-9677
+        return { 'value': price, 'currency': currency, 'content_ids': products, 'content_type': content_type }
+      }
+    }
+  }
+}
+
+        appendUrlPixels = function (rm_fire3p) {
+  function extractHostname(url) {
+    var hostname;
+
+    if (url.indexOf('://') > -1) {
+      hostname = url.split('/')[2];
+    } else {
+      hostname = url.split('/')[0];
+    }
+
+    hostname = hostname.split(':')[0];
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+  }
+
+  function extractRootDomain(url) {
+    var domain = extractHostname(url);
+    var splitArr = domain.split('.');
+    var arrLen = splitArr.length;
+
+    if (arrLen > 2) {
+      domain = splitArr[arrLen - 2] + "." + splitArr[arrLen - 1];
+      if (splitArr[arrLen - 2].length === 2 && splitArr[arrLen - 1].length === 2) {
+        domain = splitArr[arrLen - 3] + "." + domain;
+      }
+    }
+    return domain;
+  }
+
+  var content = '';
+  for (var url in urlPixelDrops) {
+    if (urlPixelDrops.hasOwnProperty(url)) {
+      var dropObject = urlPixelDrops[url];
+      var dropCheck = null;
+      switch (dropObject.dropType) {
+        case 'equals':
+          dropCheck = function (href, url) {
+            return href == encodeURIComponent(url)
+          };
+          break;
+        case 'contains':
+          dropCheck = function (href, url) {
+            return href.indexOf(encodeURIComponent(url)) != -1
+          };
+          break;
+        case 'without_querystrings':
+          dropCheck = function (href, url) {
+            var baseUrl = decodeURIComponent(href).split('?')[0];
+            return baseUrl === url;
+          };
+          break;
+      }
+
+      // TODO: Consolidate internalDomain list
+      var internalDomains=["linksynergy.com", "dpclk.com", "nxtck.com", "mediaforge.com", "jrs5.com", "dc-storm.com", "linksynergy.walmart.com"];
+
+      if (dropCheck(parameters['href'], url)) {
+        var pixelArray = dropObject['pixels'];
+        if (!(pixelArray instanceof Array)) pixelArray = [pixelArray];
+        for (var pixel in pixelArray) {
+          var pix = pixelArray[pixel];
+          var found1p = false;
+          if(!rm_fire3p) {
+            if(pixel !== "") {
+              var pixelDomain = extractRootDomain(pixel)
+              if (internalDomains.indexOf(pixelDomain) > -1) {
+                found1p = true;
+              }
+            }
+          }
+          if(rm_fire3p || found1p) {
+            if(pix.indexOf('/js/') != -1 || pix.indexOf('/js?') != -1) {
+              drop_js("//" + pix);
+            }
+            else {
+              content += "<img src='//" + pix + "' height='1' width='1' alt='' />";
+            }
+          }
+        }
+      }
+    }
+  }
+  return content;
+};
+
+        optOut = function () {
+  var result = false;
+  var optOut = "opt-out";
+  var ca = doc.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+    var parts = c.split('='); if (parts.length == 2 && parts[0] == optOut && parts[1] == optOut) result = true;
+  }
+  return result;
+};
+
+if (optOut()) {
+  createCookie('pID', '', -1);
+  createCookie('cID', '', -1);
+}
+else {
+  processtags();
+}
+        if (!window._globalMids) { window._globalMids={}; }
+if (!window._globalMids.Pix) { window._globalMids['Pix'] = {}; }
+window._globalMids.Pix[6577] = 6577;
+if (window.parent.postMessage != undefined) {
+  window.parent.postMessage({'rmvalidation': 6577}, '*');
+};
+
+      })(document);
+    </script>
+  </body>
+</html>
+…	ê»Áò      cD“ˇcD“ˇDŒ””      	    O^partitionKey=%28https%2Ccoursera.org%29,:https://tags.rd.linksynergy.com/pix/6577?type=pos&pt=home&catID=homepage&href=https%3A%2F%2Fwww.coursera.org%2Fin-progress&referrer=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fintro-to-devops%2Fhome%2Fweek%2F1&_rm_fire3p=true necko:classified 1 strongly-framed 1 security-info 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 request-method GET response-head HTTP/3 200 OK
+accept-ranges: bytes
+cache-control: max-age=2592000, no-cache
+content-length: 23095
+content-type: text/html
+expires: Thu, 01 Sep 2022 21:41:33 GMT
+last-modified: Tue, 11 Oct 2022 02:20:47 GMT
+pragma: no-cache
+x-samesite: secure
+date: Tue, 11 Oct 2022 02:20:47 GMT
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+X-Firefox-Http3: h3
+ original-response-headers accept-ranges: bytes
+cache-control: max-age=2592000, no-cache
+content-length: 23095
+content-type: text/html
+expires: Thu, 01 Sep 2022 21:41:33 GMT
+last-modified: Tue, 11 Oct 2022 02:20:47 GMT
+pragma: no-cache
+set-cookie: rmuid=1fc794dc-7bc2-40f6-add9-b1442e1d013d; Path=/; Domain=linksynergy.com; Expires=Wed, 11 Oct 2023 02:20:47 GMT; Secure; SameSite=None
+set-cookie: icts=2022-10-11T02:20:47Z; Path=/; Domain=linksynergy.com; Expires=Wed, 11 Oct 2023 02:20:47 GMT; Secure; SameSite=None
+set-cookie: cID=6577[homepage]21; Path=/; Domain=rd.linksynergy.com; Expires=Wed, 11 Oct 2023 02:20:47 GMT; Secure; SameSite=None
+x-samesite: secure
+date: Tue, 11 Oct 2022 02:20:47 GMT
+via: 1.1 google
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+ ctid 1 uncompressed-len 0 net-response-time-onstart 73 net-response-time-onstop 85   Z7
