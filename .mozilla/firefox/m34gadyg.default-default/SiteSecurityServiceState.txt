@@ -12,7 +12,7 @@ incoming.telemetry.mozilla.org:HSTS	3	19284	1697679419387,1,0,2
 github.com^partitionKey=%28http%2Cgithub.com%29:HSTS	3	19284	1697679383224,1,1,2
 smetrics.redhat.com^partitionKey=%28http%2Credhat.com%29:HSTS	0	19276	1696990767474,1,1,2
 firefox.settings.services.mozilla.com:HSTS	2	19283	1697640515684,1,0,2
-contile.services.mozilla.com:HSTS	3	19284	1697679673000,1,0,2
+contile.services.mozilla.com:HSTS	3	19284	1697680573082,1,0,2
 www.redhat.com^partitionKey=%28http%2Credhat.com%29:HSTS	0	19276	1696990761516,1,0,2
 id.redhat.com^partitionKey=%28http%2Credhat.com%29:HSTS	0	19276	1696990761464,1,1,2
 clickserve.dartsearch.net^partitionKey=%28http%2Cdartsearch.net%29:HSTS	0	19283	1697624121389,1,1,2
@@ -32,7 +32,7 @@ support.mozilla.org^partitionKey=%28http%2Cmozilla.org%29:HSTS	0	19283	169762415
 realtimesupport.clients6.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	0	19276	1676346428046,1,1,2
 taskassist-pa.clients6.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	0	19283	1676974934623,1,1,2
 addons-pa.clients6.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	2	19284	1677030305905,1,1,2
-chat.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	2	19284	1697680531542,1,0,2
+chat.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	2	19284	1697680861838,1,0,2
 accounts.google.com^partitionKey=%28http%2Cgoogle.com%29:HSTS	1	19283	1697624141370,1,1,2
 docs.github.com^partitionKey=%28http%2Cgithub.com%29:HSTS	0	19276	1697019596734,1,0,2
 www.coursera.org^partitionKey=%28http%2Ccoursera.org%29:HSTS	0	19276	1696990917998,1,1,2
