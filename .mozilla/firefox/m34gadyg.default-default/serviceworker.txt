@@ -13,13 +13,13 @@ true
 #
 
 https://chat.google.com/
-https://chat.google.com/serviceworker.js?xhrRoot=%2Fu%2F0%2F_%2FDynamiteWebUi&mssRowKey=boq-dynamite.DynamiteWebUi.en.VDDLe_pIGdM.2020.O&buildLabel=boq_dynamiteuiserver_20221013.05_p0
+https://chat.google.com/serviceworker.js?xhrRoot=%2Fu%2F0%2F_%2FDynamiteWebUi&mssRowKey=boq-dynamite.DynamiteWebUi.en.N2hZ0v41aDA.2020.O&buildLabel=boq_dynamiteuiserver_20221014.07_p1
 true
-{345a7f99-b959-406a-b085-bfe747c2124c}
+{4eba2690-c253-4705-89b3-9819af881780}
 0
-1666088404755288
-1666088404758150
-1666088404632726
+1666140541705001
+1666140541714341
+1666140541611500
 1
 true
 #

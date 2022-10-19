@@ -1,26 +1,20 @@
-# This is a large heading
 
-## This is a smaller heading
+## Geography
+i live in the city Dartmouth of HRM within the province of Nova Scotia
 
-And as **imagination** bodies forth,
-The forms of things *unknown*, the poet’s pen,
-Turns them to shapes and gives to airy nothing,
-A local *habitation* and a **name**.
+##Reading
+Three of my favourite books are
 
-- This is
-- an unordered
-- list
+1.harry porter
+2.Bhagvadgita
+3.Bhagvattam
 
-Here is `some code` in the middle of a sentence.
+##Food
 
-```
-This is
-a block
-of code
-```
+1.Chappati
+2.Apple
+3.Nuts
 
-Here is how you make [a link](https://www.wikipedia.org/).
+##Contact
 
-![This is an image.](https://github.com/yihui/xaringan/releases/download/v0.0.2/karl-moustache.jpg)
-
-nano README.md
+The best way to get in touch with me is call on my number 9023567890

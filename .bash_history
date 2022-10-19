@@ -111,3 +111,37 @@ ls
 nano readme
 bash readme.md
 nano readme.md
+git add -A
+git commit -m "added README.md"
+git push
+git status
+git branches
+git branch
+git checkout update-readme
+git checkout branch readme
+git branch readme
+git branch
+git checkout readme
+git branch
+ls
+cd radhey
+mkdir radhey
+ls
+echo >> "Shree Raam"
+cd radhey
+ls
+echo radhey
+ls
+cd
+echo readme.md
+cat  readme.md
+cat radhey
+cd radhey
+cat shree raam
+cat radhey
+cd
+git merge master
+git status
+git banch
+git branch
+cat >> bernie.jpg
