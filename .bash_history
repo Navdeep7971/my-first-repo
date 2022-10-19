@@ -145,3 +145,85 @@ git status
 git banch
 git branch
 cat >> bernie.jpg
+git branch
+cat>Hanuman.jpg
+cat > hanuman.jpg
+cd radhey
+cat>hanuman.txt
+touch barney.txt
+ls
+cat hanuman
+cat hanuman.txt
+cat barney.txt
+touch mohan.txt
+cat mohan.txt
+touch radha > mohan.txt
+cat mohan.txt
+touch radha >> mohan.txt
+cat mohan.txt
+cat radha>>mohan.txt
+cat mohan.txt
+touch radha>>mohan.txt
+cat mohan.txt
+git merge master
+ls
+cd
+ls
+git merge master
+ls
+rm *.jpg
+rm *.txt
+ls
+rm Shree Raam
+rm 'Shree Raam'
+ls
+git merge master
+ls
+git checkout master
+ls
+git checkout readme
+nano readme.md
+ls
+git branch
+nano readme.md
+git commit add -A
+git commit -m "made readme more personal"
+git commit add -A
+git commit -M "made readme more personal"
+git commit -m "made readme more personal"
+git push origin3 update_readme
+git push origin3 readme
+git push origin readme
+git push origin3 readme
+git push origin readme
+git push origin3 readme
+git push origin2 readme
+git push origin10 readme
+git push origin11 readme
+git push origin readme
+git push origin3 readme
+git push origin readme
+git push origin2 readme
+git push origin readme
+git push origin2 readme
+git push origin3 readme
+git push origin readme
+git push origin10 readme
+git push origin1 readme
+git branch
+git status | more
+git commit -m "made readme more personal" .
+git status | more
+git remote -v
+git status | more
+git add .
+git status | more
+git commit -m "made readme more personal" .
+git status | more
+git commit -m "made readme more personal" .
+git status | more
+git add -A
+git status | more
+git commit -m "made readme more personal" .
+git status | more
+git commit -a
