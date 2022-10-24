@@ -3,5 +3,5 @@
 # ibus session bus with the below address.
 # If the IBUS_ADDRESS environment variable is set, it will
 # be used rather than this file.
-IBUS_ADDRESS=unix:abstract=/home/navdeepsharma/.cache/ibus/dbus-N27w5xxT,guid=430ce68774994b73af8b39f263450665
-IBUS_DAEMON_PID=2442
+IBUS_ADDRESS=unix:abstract=/home/navdeepsharma/.cache/ibus/dbus-bDwFH1xt,guid=c051a238cb33c5d3e16cbcae634de56c
+IBUS_DAEMON_PID=2374
